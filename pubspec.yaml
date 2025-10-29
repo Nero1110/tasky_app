@@ -58,11 +58,26 @@ dev_dependencies:
   hive_ce_generator: ^1.9.5
   build_runner: ^2.8.0
   flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.0
 
 flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/Vector (1) (1).png"
+
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+  image: "assets/Vector (1) (1).png"
+  color: "#000000"
+  android_gravity: center
+
+
+  android_12:
+    image: "assets/Vector (1) (1).png"
+    color: "#000000"
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -2,6 +2,7 @@ import 'package:depi_flutter_3rd_task/light_dark_controller/light_dark_cubit.dar
 import 'package:depi_flutter_3rd_task/light_dark_controller/light_dark_states.dart';
 import 'package:depi_flutter_3rd_task/models/task_model.dart';
 import 'package:depi_flutter_3rd_task/models/user_details_model.dart';
+import 'package:depi_flutter_3rd_task/screens/splash_screen.dart';
 import 'package:depi_flutter_3rd_task/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +31,7 @@ class TaskyApp extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: WelcomeScreen(),
+            home: SplashScreen(),
             theme: ThemeData(
               colorScheme: state.colorScheme,
               textTheme: TextTheme(
