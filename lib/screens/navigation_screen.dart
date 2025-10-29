@@ -30,6 +30,7 @@ int selectedIndex = 0;
     return Scaffold(
       body: _pages[selectedIndex],
 bottomNavigationBar: BottomNavigationBar(
+  
   selectedItemColor:  Color(0xff15B86C),
               type: BottomNavigationBarType.fixed,
               currentIndex: selectedIndex,

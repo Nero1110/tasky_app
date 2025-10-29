@@ -1,16 +1,28 @@
-import 'package:depi_flutter_3rd_task/database/app_database.dart';
 import 'package:depi_flutter_3rd_task/models/task_model.dart';
 import 'package:depi_flutter_3rd_task/widgets/custom_elevated_button.dart';
 import 'package:depi_flutter_3rd_task/widgets/custom_text_field.dart';
 import 'package:depi_flutter_3rd_task/widgets/task_item.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 
-class AddingTaskScreen extends StatelessWidget {
+class AddingTaskScreen extends StatefulWidget {
   AddingTaskScreen({super.key});
+
+  @override
+  State<AddingTaskScreen> createState() => _AddingTaskScreenState();
+}
+
+class _AddingTaskScreenState extends State<AddingTaskScreen> {
   final formkey = GlobalKey<FormState>();
+
   final titlecontroller = TextEditingController();
+
   final descriptioncontroller = TextEditingController();
+
   final bool isDone = false;
+
+  bool isHighpriority = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,18 +55,44 @@ class AddingTaskScreen extends StatelessWidget {
                   name: "Task Description",
                 ),
 
-                SizedBox(height: 250),
+                Padding(
+                  padding: const EdgeInsets.only(left: 14, right: 10, top: 30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "High Priority",
+                        style: Theme.of(
+                          context,
+                        ).textTheme.headlineLarge!.copyWith(fontSize: 22),
+                      ),
+                      Switch(
+                        value: isHighpriority,
+                        activeThumbColor: Colors.white,
+                        activeTrackColor: Color(0xff15B86C),
+                        onChanged: (value) {
+                          setState(() {
+                            isHighpriority = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: 200),
                 SizedBox(
                   width: 343,
                   child: ElevatedButton(
                     onPressed: () async {
                       if (formkey.currentState!.validate()) {
-                        await AppDatabase().insertdata(
+                        await Hive.box<TaskModel>("Tasks").add(
                           TaskModel(
-                            isDone: isDone,
                             title: titlecontroller.text,
                             description: descriptioncontroller.text,
+                            isDone: isDone,
                             createdAt: DateTime.now(),
+                            isHighpriority: isHighpriority,
                           ),
                         );
 

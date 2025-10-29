@@ -1,3 +1,4 @@
+import 'package:depi_flutter_3rd_task/models/user_details_model.dart';
 import 'package:depi_flutter_3rd_task/screens/adding_task_screen.dart';
 import 'package:depi_flutter_3rd_task/screens/home_screen.dart';
 import 'package:depi_flutter_3rd_task/screens/navigation_screen.dart';
@@ -5,11 +6,13 @@ import 'package:depi_flutter_3rd_task/widgets/custom_elevated_button.dart';
 import 'package:depi_flutter_3rd_task/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 
 class WelcomeScreen extends StatelessWidget {
   WelcomeScreen({super.key});
   final formkey = GlobalKey<FormState>();
-  final TextEditingController controller=TextEditingController();
+  final TextEditingController controller = TextEditingController();
+  final usersbox = Hive.box<UserDetailsModel>("Users");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,13 +79,30 @@ class WelcomeScreen extends StatelessWidget {
                 CustomButton(
                   title: "Let's Get Started",
                   formkey: formkey,
-                  onpressed: () {
+                  onpressed: () async {
                     formkey.currentState!.validate();
                     if (formkey.currentState!.validate()) {
+                      if (usersbox.isEmpty) {
+                        await usersbox.add(
+                          UserDetailsModel(
+                            motivationQuote:
+                                "One task at a time ,One step closer",
+                            name: controller.text,
+                          ),
+                        );
+                      }
+                      await usersbox.putAt(
+                        0,
+                        UserDetailsModel(
+                          motivationQuote:
+                              "One task at a time ,One step closer",
+                          name: controller.text,
+                        ),
+                      );
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          settings: RouteSettings(arguments:controller.text ),
+                          settings: RouteSettings(arguments: controller.text),
                           builder: (context) {
                             return NavigationScreen();
                           },

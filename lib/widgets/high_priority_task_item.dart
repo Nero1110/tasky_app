@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 
-class TaskItem extends StatelessWidget {
-  TaskItem({super.key, required this.taskModel});
+class HighPriorityTaskItem extends StatelessWidget {
+  const HighPriorityTaskItem({super.key, required this.taskModel});
   final TaskModel taskModel;
   final isdone = true;
 
@@ -14,18 +14,11 @@ class TaskItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LightDarkCubit, ThemeState>(
       builder: (context, state) {
-        return Card(
-          shape: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.transparent),
-            borderRadius: BorderRadius.circular(20),
-          ),
+        return SizedBox(
+          height: 40,
           child: ListTile(
-            horizontalTitleGap: 1,
+            horizontalTitleGap: 0,
             contentPadding: const EdgeInsets.only(right: 15),
-            shape: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(20),
-            ),
             tileColor: state.backgroundcolor,
             leading: IconButton(
               onPressed: () async {
@@ -48,37 +41,10 @@ class TaskItem extends StatelessWidget {
                 decorationThickness: 2,
                 decorationColor: Colors.grey[600],
                 color: state.textcolor,
-                fontSize: 16,
+                fontSize: 15,
                 fontFamily: "Poppins",
               ),
             ),
-            subtitle: Text(
-              taskModel.description,
-              style: TextStyle(
-                decoration: taskModel.isDone
-                    ? TextDecoration.lineThrough
-                    : TextDecoration.none,
-                decorationThickness: 2,
-                decorationColor: Colors.grey[600],
-                color: taskModel.isDone ? Colors.grey[600] : Colors.grey[600],
-                fontSize: 13,
-                fontFamily: "Poppins",
-              ),
-            ),
-            trailing: PopupMenuButton<String>(
-              onSelected: (value) async {
-                if (value == "Delete") {
-                  await taskModel.delete();
-                }
-              },
-              itemBuilder: (context) {
-                return [PopupMenuItem(
-                  value: "Delete",
-                  child:Text("Delete",style: TextStyle(fontSize: 17),) )];
-              },
-              icon: Icon(Icons.settings),
-            ),
-            isThreeLine: true,
           ),
         );
       },

@@ -1,30 +1,11 @@
-import 'package:depi_flutter_3rd_task/database/app_database.dart';
 import 'package:depi_flutter_3rd_task/models/task_model.dart';
 import 'package:depi_flutter_3rd_task/widgets/task_item.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 
-class ToDoScreen extends StatefulWidget {
+class ToDoScreen extends StatelessWidget {
   ToDoScreen({super.key});
   static String title = "To Do Tasks";
-
-  State<ToDoScreen> createState() => _ToDoScreenState();
-}
-
-class _ToDoScreenState extends State<ToDoScreen> {
-  List<TaskModel> tasks = [];
-  @override
-  void showlist() async {
-    tasks = await AppDatabase().showdata();
-    setState(() {
-      tasks;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    showlist();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,15 +22,23 @@ class _ToDoScreenState extends State<ToDoScreen> {
       body: Column(
         children: [
           SizedBox(height: 20),
-          Expanded(
-            child: ListView.builder(
-              itemCount: tasks.length,
-              itemBuilder: (context, index) {
-                if (tasks[index].isDone==false) {
-                  return TaskItem(taskModel: tasks[index]);
-                }
-              },
-            ),
+          ValueListenableBuilder(
+            valueListenable: Hive.box<TaskModel>("Tasks").listenable(),
+            builder: (context, value, child) {
+              final unCompletedtasks = value.values
+                  .where((element) => !element.isDone)
+                  .toList();
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: unCompletedtasks.length,
+                  itemBuilder: (context, index) {
+                    
+                      return TaskItem(taskModel: unCompletedtasks[index]);
+                    
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),
